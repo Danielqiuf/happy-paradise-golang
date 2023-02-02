@@ -10,13 +10,13 @@ type numeric interface {
 	~int | byte | ~uint32 | float32 | ~float64
 }
 
-type list[T numeric] struct {
+type List[T numeric] struct {
 	arr []T
 	len int
 	cap int
 }
 
-func (a *list[T]) Append(element T) {
+func (a *List[T]) Append(element T) {
 	if a.cap == a.len {
 		newArr := a.Extension()
 		//	   将旧值移动到新的数组中
@@ -33,7 +33,7 @@ func (a *list[T]) Append(element T) {
 	a.len = a.len + 1
 }
 
-func (a *list[T]) Extension() *list[T] {
+func (a *List[T]) Extension() *List[T] {
 	var newCap int
 	if a.cap <= 10 {
 		newCap = 3 * a.len
@@ -48,11 +48,10 @@ func (a *list[T]) Extension() *list[T] {
 	return a
 }
 
-func MakeList[T numeric](len, cap int) *list[T] {
-	list := new(list[T])
+func MakeList[T numeric](len, cap int) *List[T] {
+	list := new(List[T])
 	if len > cap {
 		Println("invalid，len large than cap")
-		return nil
 	}
 	arr := make([]T, len, cap)
 	list.arr = arr

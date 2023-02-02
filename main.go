@@ -20,7 +20,7 @@ type Pouring struct {
 type CpStack struct {
 	CpBuilder
 	umi     string
-	pouring []byte
+	pouring utils.List[int]
 }
 
 func MiddleWare() gin.HandlerFunc {
@@ -36,6 +36,7 @@ func MiddleWare() gin.HandlerFunc {
 
 func main() {
 	var ch chan int
+	/** pouring为新分配的内存地址，指向List结构体 */
 	pouring := utils.MakeList[int](7, 10)
 
 	/** 追加数组 **/
@@ -44,10 +45,13 @@ func main() {
 
 	cp := CpStack{
 		umi:     "Umi",
-		pouring: make([]byte, 7, 10),
+		pouring: *pouring, // 使用指针访问地址
 	}
 
-	Println("pouring ==> ", pouring)
+	cp.pouring.Append(988)
+	cp.pouring.Append(123)
+
+	Println("cp --- ", cp)
 
 	ch = make(chan int, 1)
 	ch <- 100
@@ -64,8 +68,6 @@ func main() {
 		}
 
 	}()
-
-	Println("cp ===> ", cp)
 
 	//r := gin.Default()
 	//
