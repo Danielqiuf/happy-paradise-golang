@@ -9,5 +9,5 @@ type UserInfo struct {
 }
 
 func init() {
-	Println("userinfo init!!")
+	Println("userinfo initialize!!")
 }
