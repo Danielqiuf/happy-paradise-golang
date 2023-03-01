@@ -6,7 +6,7 @@ system:
   rate-limit-max: 200
 
 mysql:
-  uri: 'root:root@haotianhuyu.wechat@'
+  uri: 'root:haotianhuyu.wechat@tcp(43.139.15.105:3306)/md_media_wechat?charset=utf8mb4&collation=utf8mb4_general_ci&parseTime=true&loc=Local&timeout=10000ms'
   table-prefix: md
   no-sql: false
   init-data: true

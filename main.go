@@ -28,6 +28,7 @@ func main() {
 	global.RuntimeRoot = strings.TrimSuffix(file, "main.go")
 
 	initialize.Config(ctx, conf)
+	initialize.Mysql()
 
 	listen.Http(
 		listen.WithHttpCtx(ctx),

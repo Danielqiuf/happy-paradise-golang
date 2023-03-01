@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/piupuer/go-helper/pkg/log"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
-	"happy-paradise-golang/api/v1"
 	"happy-paradise-golang/pkg/global"
 	"happy-paradise-golang/pkg/middleware"
 )
@@ -27,10 +26,10 @@ func RegisterServer(ctx context.Context) *gin.Engine {
 		middleware.AccessLog(
 			middleware.WithAccessLogUrlPrefix(global.Conf.System.UrlPrefix),
 		),
-		//middleware.Exception,
-		//middleware.Transaction(
-		//	middleware.WithTransactionDbNoTx(global.Mysql),
-		//),
+		middleware.Exception,
+		middleware.Transaction(
+			middleware.WithTransactionDbTx(global.Mysql),
+		),
 	)
 
 	apiGroup := r.Group(global.Conf.System.UrlPrefix)
@@ -39,7 +38,7 @@ func RegisterServer(ctx context.Context) *gin.Engine {
 
 	v1Group := apiGroup.Group(global.Conf.System.ApiVersion)
 
-	v1Group.POST("/upload", v1.UploadHandler)
+	StreamApi(v1Group)
 
 	return r
 }
