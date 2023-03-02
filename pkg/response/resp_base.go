@@ -35,6 +35,11 @@ type Page struct {
 	Total       int64 `json:"total"`
 }
 
+type PageData struct {
+	Page
+	List interface{} `json:"list"`
+}
+
 func GetSuccess() Response {
 	return GetResult(global.Ok, map[string]interface{}{}, global.ErrorHandle[global.Ok])
 }
@@ -65,6 +70,31 @@ func GetSuccessWithData(data ...interface{}) Response {
 	return GetSuccess()
 }
 
-func SuccessJsonData(data ...interface{}) {
+func SuccessData(data ...interface{}) {
 	panic(GetSuccessWithData(data...))
+}
+
+func GetSuccessWithPageData(real, brief interface{}, page Page) Response {
+	utils.Struct2StructByJson(real, brief)
+	var rp PageData
+	rp.Page = page
+	rp.List = brief
+	return GetResult(global.Ok, rp, global.ErrorHandle[global.Ok])
+}
+
+func GetFailWithMsg(format interface{}, a ...interface{}) Response {
+	return GetResult(global.Error, map[string]interface{}{}, format, a...)
+}
+
+func GetFailWithCode(code int) Response {
+	// default NotOk
+	msg := global.ErrorHandle[global.Error]
+	if val, ok := global.ErrorHandle[code]; ok {
+		msg = val
+	}
+	return GetResult(code, map[string]interface{}{}, msg)
+}
+
+func GetFailWithCodeAndMsg(code int, format interface{}, a ...interface{}) Response {
+	return GetResult(code, map[string]interface{}{}, format, a...)
 }

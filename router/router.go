@@ -40,5 +40,7 @@ func RegisterServer(ctx context.Context) *gin.Engine {
 
 	StreamApi(v1Group)
 
+	CosApi(v1Group)
+
 	return r
 }

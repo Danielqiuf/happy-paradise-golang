@@ -1,7 +1,6 @@
 package v1
 
 import (
-	. "fmt"
 	"github.com/gin-gonic/gin"
 	"happy-paradise-golang/pkg/response"
 )
@@ -13,7 +12,7 @@ func StreamVideoHandler(c *gin.Context) {
 	}
 
 	rp.Id = 12
-	response.SuccessJsonData(rp)
+	response.SuccessData(rp)
 }
 
 func StreamVideoUploadHandler(c *gin.Context) {

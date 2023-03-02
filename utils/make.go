@@ -2,6 +2,7 @@ package utils
 
 import (
 	. "fmt"
+	"strings"
 )
 
 func init() {}
@@ -58,4 +59,27 @@ func MakeList[T numeric](len, cap int) *List[T] {
 	list.len = 0
 	list.cap = cap
 	return list
+}
+
+func MakeHex(v int) string {
+	m := 0
+	hex := make([]int, 0)
+	for {
+		m = v % 16
+		v = v / 16
+		if v == 0 {
+			hex = append(hex, m)
+			break
+		}
+		hex = append(hex, m)
+	}
+	hexStr := []string{}
+	for i := len(hex) - 1; i >= 0; i-- {
+		if hex[i] >= 10 {
+			hexStr = append(hexStr, Sprintf("%c", 'A'+hex[i]-10))
+		} else {
+			hexStr = append(hexStr, Sprintf("%d", hex[i]))
+		}
+	}
+	return strings.Join(hexStr, "")
 }

@@ -29,9 +29,9 @@ func Transaction(options ...func(*TransactionOptions)) gin.HandlerFunc {
 	for _, f := range options {
 		f(ops)
 	}
-	//if ops.dbNoTx == nil {
-	//	panic("dbNoTx is empty")
-	//}
+	if ops.dbNoTx == nil {
+		panic("dbNoTx is empty")
+	}
 	return func(c *gin.Context) {
 		method := c.Request.Method
 		noTransaction := false
@@ -44,30 +44,30 @@ func Transaction(options ...func(*TransactionOptions)) gin.HandlerFunc {
 			_, span := otel.Tracer(tracing.Middleware).Start(ctx, tracing.Name(tracing.Middleware, "Transaction"))
 			defer span.End()
 
-			//tx := getTx(c, *ops)
+			tx := getTx(c, *ops)
 			if err := recover(); err != nil {
 				if rp, ok := err.(response.Response); ok {
-					//if !noTransaction {
-					//	if rp.Code == global.Ok || c.GetBool(global.MiddlewareTransactionForceCommitCtxKey) {
-					//		tx.Commit()
-					//	} else {
-					//		tx.Rollback()
-					//	}
-					//}
+					if !noTransaction {
+						if rp.Code == global.Ok || c.GetBool(global.MiddlewareTransactionForceCommitCtxKey) {
+							tx.Commit()
+						} else {
+							tx.Rollback()
+						}
+					}
 					rp.RequestId, _, _ = tracing.GetId(c)
 					c.JSON(http.StatusOK, rp)
 					c.Abort()
 					return
 				}
-				//if !noTransaction {
-				//	tx.Rollback()
-				//}
+				if !noTransaction {
+					tx.Rollback()
+				}
 				// 抛出异常
 				panic(err)
 			} else {
-				//if !noTransaction {
-				//	tx.Commit()
-				//}
+				if !noTransaction {
+					tx.Commit()
+				}
 			}
 			c.Abort()
 		}()
