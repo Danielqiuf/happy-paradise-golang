@@ -33,8 +33,7 @@ const (
 	TencentCosSecretId  = "AKIDZ0GLBl7F8l9ICtKXGl11nvoVzGH1SilZ"
 	TencentCosSecretKey = "bqsfDWDiyxjJgcLp56sOgjYMyOaXGo7B"
 	TencentCosTimeout   = 100 * time.Second
-	TencentCdnBucket    = "cdn-md"
-	TencentCdnAuthPkey  = "dimtm5evg50ijsx2hvuwyfoiu65"
+	TencentCdnDomain    = "cdn-md.haotianhuyu.com"
 )
 
 const (
